@@ -35,6 +35,7 @@ class Nytimes:
         self.Controller.SelectRecentNews()
         self.Controller.FilterDate()
         sleep(5)
+        print(self.Controller.GetNewsAmount())
         for index in range(1, self.Controller.GetNewsAmount() + 1):
             print(index)
             try:
