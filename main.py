@@ -3,8 +3,10 @@ from functions import NYTimesController
 from time import sleep
 import pandas as pd
 import urllib.request
+from robocorp.tasks import task
 
 
+@task
 class Nytimes:
     
     def __init__(self,site,SearchPhrase,Sections,MonthsAgo,Controller):
