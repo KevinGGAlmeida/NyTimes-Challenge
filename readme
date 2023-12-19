@@ -1,7 +1,0 @@
-What is the Requirements.txt file?
-
-The requirements.txt file, is the file that contains all the libs necessary to run the automation
-
-To install the requirements.txt file, run the code above
-
-pip install -r requirements.txt
