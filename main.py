@@ -36,6 +36,7 @@ class Nytimes:
         self.Controller.FilterDate()
         sleep(5)
         for index in range(1, self.Controller.GetNewsAmount() + 1):
+            print(index)
             try:
                 # Click in SHOW MORE
                 try:
