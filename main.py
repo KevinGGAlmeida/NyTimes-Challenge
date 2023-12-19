@@ -15,8 +15,7 @@ class Nytimes:
         self.Controller = Controller(self.driver, self.sections, self.MonthsAgo)
 
     def launch(self):
-        self.driver.open_available_browser(f"{self.site}{self.SearchPhrase}")
-        self.driver.maximize_browser_window()
+        self.driver.open_available_browser(f"{self.site}{self.SearchPhrase}",headless=True)
 
     def Data(self):
         self.df = pd.DataFrame(
