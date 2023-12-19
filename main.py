@@ -95,27 +95,26 @@ class Nytimes:
         self.driver.close_browser()
 
 
-if __name__ == "__main__":
-    for Tries in range(3):
-        try:
-            Run = Nytimes(
-                "https://www.nytimes.com/search?query=",
-                "car",
-                ["Technology", "Business"],
-                4,
-                NYTimesController,
-            )
-            Run.Data()
-            Run.launch()
-            Run.Navigation()
-            Run.CloseWindow()
-            break
+for Tries in range(3):
+    try:
+        Run = Nytimes(
+            "https://www.nytimes.com/search?query=",
+            "car",
+            ["Technology", "Business"],
+            4,
+            NYTimesController,
+        )
+        Run.Data()
+        Run.launch()
+        Run.Navigation()
+        Run.CloseWindow()
+        break
 
-        except:
-            Run.CloseWindow()
+    except:
+        Run.CloseWindow()
 
-            if Tries == 2:
-                raise
+        if Tries == 2:
+            raise
 
-            else:
-                print("An error Occurred, Trying again")
+        else:
+            print("An error Occurred, Trying again")

@@ -11,10 +11,10 @@ An in-depth paragraph about your project and overview of use.
 ### Dependencies
 
 * Libraries 
-* - rpaframework
-* - pandas  
-* - python 3.7 or newest
-* ex. Windows 10
+- rpaframework
+- pandas  
+* Python 3.7 or latest
+
 
 ### Installing
 
