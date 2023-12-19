@@ -8,6 +8,7 @@ class NyTimesLocators:
     SearchDropDownMenu = '//*[@data-testid="search-multiselect-button"]'
     CheckBoxSection = '//input[contains(@value,"{}")]'
     DateDropDownMenu = '//*[@data-testid="search-date-dropdown-a"]'
+    NotificationBtn = '//*[@aria-label="Button to collapse the message"]'
     SpecificDate = '//*[@value="Specific Dates"]'
     StartDate = "startDate"
     EndDate = "endDate"
@@ -23,6 +24,14 @@ class NYTimesController:
         self.driver = driver
         self.section = section
         self.MonthsAgo = MonthsAgo
+
+    def CloseNotification(self):
+        try:
+            self.driver.page_should_contain_element(NyTimesLocators.NotificationBtn)
+            self.driver.click_element(NyTimesLocators.NotificationBtn)
+
+        except Exception as error:
+            pass
 
     def SelectSections(self):
         """

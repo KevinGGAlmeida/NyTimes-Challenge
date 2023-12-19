@@ -4,7 +4,7 @@ The purpose of this automations is to get News informations, according to the us
 
 ## Description
 
-An in-depth paragraph about your project and overview of use.
+This automation, opens the Browser, search News about the theme that the user input and filter the news, according to the Sections that the user wants to see, get New's title, New's Descriptions, New's Release Date and download the New's Image, then, extract all the info into a Excel file
 
 ## Getting Started
 

@@ -15,7 +15,7 @@ class Nytimes:
         self.Controller = Controller(self.driver, self.sections, self.MonthsAgo)
 
     def launch(self):
-        self.driver.open_available_browser(f"{self.site}{self.SearchPhrase}",headless=True)
+        self.driver.open_available_browser(f"{self.site}{self.SearchPhrase}")
 
     def Data(self):
         self.df = pd.DataFrame(
@@ -30,6 +30,7 @@ class Nytimes:
         )
 
     def Navigation(self):
+        self.Controller.CloseNotification()
         self.Controller.SelectSections()
         self.Controller.SelectRecentNews()
         self.Controller.FilterDate()
@@ -40,7 +41,8 @@ class Nytimes:
                 # Click in SHOW MORE
                 try:
                     self.Controller.ClickShowMore()
-                except:
+                except Exception as error:
+                    print(str(error))
                     pass
 
                 # Get Date, Title and Description
