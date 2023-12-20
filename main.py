@@ -94,7 +94,7 @@ class Nytimes:
                 print(str(error), error.__traceback__.tb_lineno, f"New's Line: {index}")
                 print("Line of ADVERTISEMENT")
 
-        self.df.to_excel("output/News.xlsx")
+        self.df.to_excel("output/News.xlsx",index=False)
 
     def CloseWindow(self):
         self.driver.close_browser()
