@@ -138,9 +138,6 @@ class NYTimesController:
         Method that get the Title of the news
         """
         try:
-            self.driver.page_should_contain_element(
-                NyTimesLocators.NewsInfo.format(index)
-            )
 
             # Wait for the Title element loads, then, return the title text
             return self.driver.get_text(NyTimesLocators.NewsInfo.format(index))

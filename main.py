@@ -47,7 +47,6 @@ class Nytimes:
                 try:
                     self.Controller.ClickShowMore()
                 except Exception as error:
-                    print(str(error))
                     pass
 
                 # Get Date, Title and Description
