@@ -6,12 +6,15 @@ import urllib.request
 
 
 class Nytimes:
-    def __init__(self, site, SearchPhrase, Sections, MonthsAgo, Controller):
+    def __init__(
+        self, site, SearchPhrase, Sections, MonthsAgo, Controller, NumberOfNews
+    ):
         self.site = site
         self.MonthsAgo = MonthsAgo
         self.SearchPhrase = SearchPhrase
         self.sections = Sections
         self.driver = Selenium()
+        self.NumberOfNews = NumberOfNews
         self.Controller = Controller(self.driver, self.sections, self.MonthsAgo)
 
     def launch(self):
@@ -36,7 +39,7 @@ class Nytimes:
         self.Controller.FilterDate()
         sleep(5)
         print(self.Controller.GetNewsAmount())
-        for index in range(1, self.Controller.GetNewsAmount() + 1):
+        for index in range(1, self.NumberOfNews + 1):
             print(index)
             try:
                 # Click in SHOW MORE
@@ -105,6 +108,7 @@ for Tries in range(3):
             ["Technology", "Business"],
             4,
             NYTimesController,
+            100,
         )
         Run.Data()
         Run.launch()
