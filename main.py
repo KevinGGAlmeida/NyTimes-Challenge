@@ -56,7 +56,7 @@ class Nytimes:
                 try:
                     self.filename = self.Controller.GetFilename(index)
                     urllib.request.urlretrieve(
-                        self.filename, f"output/images/{self.Info[2]}.{self.filename[-4:]}"
+                        self.filename, f"output/{self.Info[2]}.{self.filename[-4:]}"
                     )
 
                 except Exception as error:
@@ -94,7 +94,7 @@ class Nytimes:
                 print(str(error), error.__traceback__.tb_lineno, f"New's Line: {index}")
                 print("Line of ADVERTISEMENT")
 
-        self.df.to_excel("output/report/News.xlsx")
+        self.df.to_excel("output/News.xlsx")
 
     def CloseWindow(self):
         self.driver.close_browser()
