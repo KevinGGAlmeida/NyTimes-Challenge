@@ -1,177 +1,132 @@
-from time import sleep
 from dateutil.relativedelta import relativedelta
 import datetime
+from RPA.Browser.Selenium import ElementNotFound, ElementClickInterceptedException
 
 
-class NyTimesLocators:
-    SearchField = "searchTextField"
-    SearchDropDownMenu = '//*[@data-testid="search-multiselect-button"]'
-    CheckBoxSection = '//input[contains(@value,"{}")]'
-    DateDropDownMenu = '//*[@data-testid="search-date-dropdown-a"]'
-    NotificationBtn = '//*[@aria-label="Button to collapse the message"]'
-    SpecificDate = '//*[@value="Specific Dates"]'
-    StartDate = "startDate"
-    EndDate = "endDate"
-    RecentNewsOption = "//*[@class='css-v7it2b']"
-    NewsAmount = '//*[@data-testid="SearchForm-status"]'
-    NewsInfo = "//*[@data-testid='search-results']/li[{}]"
-    ImageSrc = '//*[@id="site-content"]//li[{}]//img'
-    BtnShowMore = '//*[@data-testid="search-show-more-button"]'
+class NYTimesLocators:
+    def __init__(self):
+        self.SearchField = "searchTextField"
+        self.SearchDropDownMenu = '//*[@data-testid="search-multiselect-button"]'
+        self.CheckBoxSection = '//input[contains(@value,"{}")]'
+        self.DateDropDownMenu = '//*[@data-testid="search-date-dropdown-a"]'
+        self.NotificationBtn = '//*[@aria-label="Button to collapse the message"]'
+        self.SpecificDate = '//*[@value="Specific Dates"]'
+        self.StartDate = "startDate"
+        self.EndDate = "endDate"
+        self.RecentNewsOption = "//*[@class='css-v7it2b']"
+        self.NewsAmount = '//*[@data-testid="SearchForm-status"]'
+        self.NewsInfo = "//*[@data-testid='search-results']/li[{}]"
+        self.ImageSrc = '//*[@id="site-content"]//li[{}]//img'
+        self.BtnShowMore = '//*[@data-testid="search-show-more-button"]'
 
 
 class NYTimesController:
-    def __init__(self, driver, section, MonthsAgo):
+    def __init__(self, driver, section, monthsago):
         self.driver = driver
         self.section = section
-        self.MonthsAgo = MonthsAgo
+        self.monthsago = monthsago
+        self.locators = NYTimesLocators()
 
-    def CloseNotification(self):
+    def closenotification(self):
         try:
-            self.driver.page_should_contain_element(NyTimesLocators.NotificationBtn)
-            self.driver.click_element(NyTimesLocators.NotificationBtn)
+            self.driver.click_element_when_visible(self.locators.NotificationBtn)
 
-        except Exception as error:
+        except AssertionError:
+            input("opa")
             pass
 
-    def SelectSections(self):
+    def selectsections(self):
         """
         Method to select the Sections that the user wants
         """
-        try:
-            # Wait the element exists, then, click to open the CheckBox Menu
-            self.driver.page_should_contain_element(NyTimesLocators.SearchField)
-            self.driver.click_element(NyTimesLocators.SearchDropDownMenu)
+        # Wait the element exists, then, click to open the CheckBox Menu
+        self.driver.page_should_contain_element(self.locators.SearchField)
+        self.driver.click_element(self.locators.SearchDropDownMenu)
 
-            # Select the sections that the user wants
+        # Select the sections that the user wants
 
-            for values in self.section:
-                try:
-                    # This one uses Dynamically Locator, so, it's not in the Locators Variable
-                    self.driver.click_element(
-                        NyTimesLocators.CheckBoxSection.format(values)
-                    )
+        for values in self.section:
+            try:
+                # This one uses Dynamically Locator, so, it's not in the self.locators Variable
+                self.driver.click_element(self.locators.CheckBoxSection.format(values))
 
-                except:
-                    print(f"The Section : {values} does not exist, trying the next one")
+            except ElementNotFound:
+                print(f"The Section : {values} does not exist, trying the next one")
 
-        except Exception as error:
-            raise Exception(
-                f"Error: {str(error)}\n Line error: {error.__traceback__.tb_lineno}"
-            )
-
-    def FilterDate(self):
+    def filterdate(self):
         """
-        Method to filter the the News date that we want to see
+        Method to filter the News date that we want to see
         """
+        # Open the date Menu
+        self.driver.click_element(self.locators.DateDropDownMenu)
 
-        try:
-            # Open the date Menu
-            self.driver.click_element(NyTimesLocators.DateDropDownMenu)
-            sleep(2)
+        # Click in specific Dates
+        self.driver.click_element(self.locators.SpecificDate)
 
-            # Click in specific Dates
-            self.driver.click_element(NyTimesLocators.SpecificDate)
+        # Wait for the input loads and then, insert the Start Date
+        self.driver.page_should_contain_element(self.locators.StartDate)
+        self.driver.press_keys(
+            self.locators.StartDate,
+            datetime.datetime.strftime(
+                datetime.datetime.today() - relativedelta(months=self.monthsago),
+                "%m/%d/%Y",
+            ),
+            "ENTER",
+        )
 
-            # Wait for the input loads and then, insert the Start Date
-            self.driver.page_should_contain_element(NyTimesLocators.StartDate)
-            self.driver.press_keys(
-                NyTimesLocators.StartDate,
-                datetime.datetime.strftime(
-                    datetime.datetime.today() - relativedelta(months=self.MonthsAgo),
-                    "%m/%d/%Y",
-                ),
-                "ENTER",
-            )
+        # Wait for the input loads and then, insert the End Date
+        self.driver.page_should_contain_element(self.locators.EndDate)
+        self.driver.press_keys(
+            self.locators.EndDate,
+            datetime.datetime.strftime(datetime.datetime.today(), "%m/%d/%Y"),
+            "ENTER",
+        )
 
-            # Wait for the input loads and then, insert the End Date
-            self.driver.page_should_contain_element(NyTimesLocators.EndDate)
-            self.driver.press_keys(
-                NyTimesLocators.EndDate,
-                datetime.datetime.strftime(datetime.datetime.today(), "%m/%d/%Y"),
-                "ENTER",
-            )
-
-            sleep(5)
-
-        except Exception as error:
-            raise Exception(
-                f"Error: {str(error)}\n Line error: {error.__traceback__.tb_lineno}"
-            )
-
-    def SelectRecentNews(self):
+    def selectrecentnews(self):
         """
         Method that select the Newest News
         """
 
         # Select the option Newest in the Dropdown Menu
-        try:
-            self.driver.select_from_list_by_value(
-                NyTimesLocators.RecentNewsOption, "newest"
-            )
+        self.driver.select_from_list_by_value(self.locators.RecentNewsOption, "newest")
 
-        except Exception as error:
-            raise Exception(
-                f"Error: {str(error)}\n Line error: {error.__traceback__.tb_lineno}"
-            )
-
-    def GetNewsAmount(self):
+    def getnewsamount(self):
         """
         Method to get the Amount of News filtered
         """
 
         # Return the number of News
-        try:
-            return int(
-                self.driver.get_text(NyTimesLocators.NewsAmount)
-                .split()[1]
-                .replace(",", "")
-                .replace(".", "")
-            )
+        return int(
+            self.driver.get_text(self.locators.NewsAmount)
+            .split()[1]
+            .replace(",", "")
+            .replace(".", "")
+        )
 
-        except Exception as error:
-            raise Exception(
-                f"Error: {str(error)}\n Line error: {error.__traceback__.tb_lineno}"
-            )
-
-    def GetData(self, index):
+    def getdata(self, index):
         """
         Method that get the Title of the news
         """
-        try:
+        # Wait for the Title element loads, then, return the title text
+        self.driver.wait_until_element_is_visible(self.locators.NewsInfo.format(index))
+        return self.driver.get_text(self.locators.NewsInfo.format(index))
 
-            # Wait for the Title element loads, then, return the title text
-            return self.driver.get_text(NyTimesLocators.NewsInfo.format(index))
-
-        except Exception as error:
-            raise Exception(
-                f"Error: {str(error)}\n Line error: {error.__traceback__.tb_lineno}"
-            )
-
-    def GetFilename(self, index):
+    def getfilename(self, index):
         """
         Method that get the filename
         """
+        return self.driver.get_element_attribute(
+            self.locators.ImageSrc.format(index), "srcset"
+        ).split(" ")[0]
 
-        try:
-            return self.driver.get_element_attribute(
-                NyTimesLocators.ImageSrc.format(index), "srcset"
-            ).split(" ")[0]
-
-        except Exception as error:
-            raise Exception(
-                f"Error: {str(error)}\n Line error: {error.__traceback__.tb_lineno}"
-            )
-
-    def ClickShowMore(self):
+    def clickshowmore(self):
         """
         Method that click in Show More
         """
 
         try:
             # Click in Show More
-            self.driver.click_element(NyTimesLocators.BtnShowMore)
+            self.driver.click_element_when_clickable(self.locators.BtnShowMore, timeout=2)
 
-        except Exception as error:
-            raise Exception(
-                f"Error: {str(error)}\n Line error: {error.__traceback__.tb_lineno}"
-            )
+        except ElementNotFound or ElementClickInterceptedException:
+            pass
