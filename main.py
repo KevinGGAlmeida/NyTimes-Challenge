@@ -4,7 +4,7 @@ import pandas as pd
 import urllib.request
 import urllib.error
 from pathlib import Path
-
+import yaml
 from robocorp.tasks import task
 
 
@@ -94,13 +94,17 @@ class Nytimes:
 
 @task
 def task():
+    with open('config.yaml', 'r') as file:
+        configfile = yaml.safe_load(file)
+
+
     run = Nytimes(
-        "https://www.nytimes.com/search?query=",
-        "car",
-        ["Technology", "Business"],
-        4,
+        configfile["Parameters"]["Url"],
+        configfile["Parameters"]["SearchPhrase"],
+        configfile["Parameters"]["Sections"],
+        configfile["Parameters"]["MonthsAgoSearch"],
         NYTimesController,
-        100,
+        configfile["Parameters"]["NewsAmount"],
     )
     run.launch()
     run.navigation()

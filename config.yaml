@@ -1,0 +1,9 @@
+Parameters:
+  Url: https://www.nytimes.com/search?query=
+  SearchPhrase: car
+  Sections:
+  - Technology
+  - Business
+  MonthsAgoSearch: 4
+  NewsAmount: 100
+  
