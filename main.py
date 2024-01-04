@@ -94,7 +94,7 @@ class Nytimes:
 
 @task
 def task():
-    with open('config.yaml', 'r') as file:
+    with open(f'{Path.cwd()}/config.yaml', 'r') as file:
         configfile = yaml.safe_load(file)
 
 
